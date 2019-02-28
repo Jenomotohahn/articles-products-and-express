@@ -1,0 +1,22 @@
+<h2>{{articles.title}}</h2>
+<div>
+    <div id={{articles.author}}>By : {{articles.author}}</div>
+    <div id={{articles.title}}>{{articles.body}}</div>
+</div>
+<br>
+<br>
+<form action="/articles/{{articles.title}}/edit" method="GET">
+
+    <div>
+        <button type="submit">Edit</button>
+    </div>
+</form>
+<form action="/articles/{{articles.title}}/delete" method="POST">
+
+    <button type="submit">Delete</button>
+</form>
+
+
+<div>
+    {{>footer}}
+</div>

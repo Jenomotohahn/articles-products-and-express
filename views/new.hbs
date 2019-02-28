@@ -1,0 +1,30 @@
+<form action='/articles/new' method='POST'>
+    <div>
+        <label for="title">
+            Title of Article:
+        </label>
+        <input type="text" name="title" value={{title}}>
+    </div>
+    <div>
+        <label for="author">
+            Author:
+        </label>
+        <input type="text" name="author" value={{author}}>
+    </div>
+    <div>
+        <label for="body">
+            Body Content:
+        </label>
+        <input type="text" name="body" value={{body}}>
+    </div>
+    <div>
+        <button type="submit">Post New Article</button>
+    </div>
+
+    <div>
+        {{msg}}
+    </div>
+
+    {{>footer}}
+
+</form>
