@@ -4,10 +4,15 @@
   "description": "## Tests Let the **tests drive your development** or write your tests after. The choice is up to you! As for the testing tools use:   - [mocha](https://mochajs.org/)   - [chai](https://chaijs.com/)   - [supertest](https://github.com/visionmedia/supertest)     - [supertest is built upon `superagent` so these docs will be helpful as well](https://github.com/visionmedia/superagent)",
   "main": "server.js",
   "dependencies": {
+    "client": "0.0.1",
+    "dotenv": "^6.2.0",
     "express": "^4.16.4",
     "express-handlebars": "^3.0.1",
     "form-data": "^2.3.3",
-    "handlebars": "^4.1.0"
+    "handlebars": "^4.1.0",
+    "knex": "^0.16.3",
+    "pg": "^7.8.2",
+    "sqlite3": "^4.0.6"
   },
   "devDependencies": {},
   "scripts": {

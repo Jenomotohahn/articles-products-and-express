@@ -1,2 +1,24 @@
-<h1>Products</h1>
-{{#each }}
+<h2>Product : {{product.name}}</h2>
+
+<br>
+<br>
+<div>
+    <div id={{product.id}}> ID : {{product.id}}</div>
+    <div class="price">Price: {{product.price}}</div>
+    <div class="inventory">Inventory: {{product.inventory}}</div>
+</div>
+<div>
+    <form action="./{{product.id}}/edit" method="GET">
+        <div>
+            <button type="submit">Edit</button>
+        </div>
+    </form>
+    <form action="" method="POST">
+        <div>
+            <button type="submit">Delete</button>
+        </div>
+    </form>
+</div>
+<div>
+    {{>footer}}
+</div>

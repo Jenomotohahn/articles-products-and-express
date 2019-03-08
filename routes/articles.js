@@ -65,6 +65,7 @@ router
   .get((req, res) => {
     const articles = articleData.getDataByTitle(req.params.title);
     console.log(articles.title);
+    console.log(articles);
     res.render("article", { articles });
   })
   .put((req, res) => {
