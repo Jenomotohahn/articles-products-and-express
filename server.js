@@ -6,6 +6,7 @@ const path = require("path");
 const bp = require("body-parser");
 const products = require("./routes/products");
 const articles = require("./routes/articles");
+const knex = require("./database")
 
 const productData = require("./db/products");
 

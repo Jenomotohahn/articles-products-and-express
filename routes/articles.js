@@ -3,14 +3,18 @@ const router = express.Router();
 const app = express();
 const bp = require("body-parser");
 const articleData = require("../db/articles");
+const knex = require("../database")
 
 app.use(bp.json());
 
 router
   .route("/articles")
   .get((req, res) => {
-    const articles = articleData.storage;
-    res.render("index", { articles });
+    articleData.getAllArticles().then((articles) => {
+        console.log(articles);
+        // console.log(process.env)
+        res.render("index", { articles });
+      });
   })
   .post((req, res) => {
     let newArr = articleData.storage.map(x => x.title);
@@ -48,24 +52,32 @@ router
         msg: "Please Fill All Fields"
       });
     } else {
-      let newArr = articleData.storage.map(x => x.title);
-      if (newArr.indexOf(req.body.title) === -1) {
-        articleData.createNew(req.body);
-        res.redirect("/articles/" + req.body.title);
-      } else {
-        res.render("new", {
-          msg: "Article already exists, please edit to change!"
-        });
-      }
-    }
-  });
+      // articleData.getAllArticles().map(x => x.title).then((articles) => {
+      //   if (newArr[0].indexOf(req.body.title) === -1) {
+      //     articleData.createNew(req.body);
+      //     res.redirect("/articles/" + req.body.title);
+      //   } else {
+      //     res.render("new", {
+      //       msg: "Article already exists, please edit to change!"
+      //     });
+        }
+      })
+    // }
+  // });
 
 router
   .route("/articles/:title")
   .get((req, res) => {
-    const articles = articleData.getDataByTitle(req.params.title);
-    console.log(articles.title);
-    res.render("article", { articles });
+    articleData.getArticleByTitle(req.params.title).then((articles) => {
+      console.log(articles)
+      console.log('type of', typeof articles)
+      console.log('title', articles[0].title);
+      res.render("article", articles[0]);
+    });
+    // console.log(articles.title);
+    // knex('articles').where('title',req.params.title).then((articles) => {
+    //   console.log('articles', articles)
+    // });
   })
   .put((req, res) => {
     const articleByTitle = articleData.getDataByTitle(req.body.title);
@@ -82,44 +94,44 @@ router
     }
   });
 
-router.route("/articles/:title/delete").post((req, res) => {
-  const article = articleData.getDataByTitle(req.params.title);
-  if (article) {
-    articleData.storage = articleData.storage.filter(x => x !== article);
-    console.log(articleData.storage);
-    res.redirect("/articles");
-  } else {
-    res.json("The article does not exist in storage!");
-  }
-});
+// router.route("/articles/:title/delete").post((req, res) => {
+//   const article = articleData.getDataByTitle(req.params.title);
+//   if (article) {
+//     articleData.storage = articleData.storage.filter(x => x !== article);
+//     console.log(articleData.storage);
+//     res.redirect("/articles");
+//   } else {
+//     res.json("The article does not exist in storage!");
+//   }
+// });
 
-router
-  .route("/articles/:title/edit")
-  .get((req, res) => {
-    const article = articleData.getDataByTitle(req.params.title);
-    res.render("edit", article);
-  })
-  .post((req, res) => {
-    if (
-      req.body.title === "" ||
-      req.body.body === "" ||
-      req.body.author === ""
-    ) {
-      res.render("edit", {
-        title: req.body.title,
-        author: req.body.author,
-        body: req.body.body,
-        msg: "Please fill out all Fields!"
-      });
-    } else {
-      const newStorage = articleData.storage.filter(
-        x => x.title !== req.params.title
-      );
-      articleData.storage = newStorage;
-      articleData.createNew(req.body);
-      res.redirect("/articles/" + req.body.title);
-    }
-  });
+// router
+//   .route("/articles/:title/edit")
+//   .get((req, res) => {
+//     const article = articleData.getDataByTitle(req.params.title);
+//     res.render("edit", article);
+//   })
+//   .post((req, res) => {
+//     if (
+//       req.body.title === "" ||
+//       req.body.body === "" ||
+//       req.body.author === ""
+//     ) {
+//       res.render("edit", {
+//         title: req.body.title,
+//         author: req.body.author,
+//         body: req.body.body,
+//         msg: "Please fill out all Fields!"
+//       });
+//     } else {
+//       const newStorage = articleData.storage.filter(
+//         x => x.title !== req.params.title
+//       );
+//       articleData.storage = newStorage;
+//       articleData.createNew(req.body);
+//       res.redirect("/articles/" + req.body.title);
+//     }
+//   });
 
 module.exports = router;
 
