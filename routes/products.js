@@ -55,7 +55,7 @@ router
     res.render("editProd", req.body);
   })
   .post((req, res) => {
-    console.log(req.body);
+    
   });
 
 module.exports = router;
