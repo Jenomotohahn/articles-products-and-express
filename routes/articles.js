@@ -52,18 +52,21 @@ router
         msg: "Please Fill All Fields"
       });
     } else {
-      // articleData.getAllArticles().map(x => x.title).then((articles) => {
-      //   if (newArr[0].indexOf(req.body.title) === -1) {
-      //     articleData.createNew(req.body);
-      //     res.redirect("/articles/" + req.body.title);
-      //   } else {
-      //     res.render("new", {
-      //       msg: "Article already exists, please edit to change!"
-      //     });
+      articleData.getAllArticles().map(x => x.title).then((articles) => {
+        if (articles.indexOf(req.body.title) === -1) {
+          let newArticleData = articleData.createNew(req.body)
+          knex('articles').insert(newArticleData).then(() =>{
+            res.redirect("/articles/" + req.body.title);
+            res.json({success: true, message: 'ok'});
+          })
+        } else {
+          res.render("new", {
+            msg: "Article already exists, please edit to change!"
+          });
         }
       })
-    // }
-  // });
+    }
+  });
 
 router
   .route("/articles/:title")
@@ -80,7 +83,7 @@ router
     // });
   })
   .put((req, res) => {
-    const articleByTitle = articleData.getDataByTitle(req.body.title);
+    const articleByTitle = articleData.getArticleByTitle(req.body.title);
     const articles = articleData.storage.filter(x => x !== articleByTitle);
     if (articleByTitle && req.params.title === req.body.title) {
       console.log("before Storage", articleData.storage);
@@ -94,45 +97,49 @@ router
     }
   });
 
-// router.route("/articles/:title/delete").post((req, res) => {
-//   const article = articleData.getDataByTitle(req.params.title);
-//   if (article) {
-//     articleData.storage = articleData.storage.filter(x => x !== article);
-//     console.log(articleData.storage);
-//     res.redirect("/articles");
-//   } else {
-//     res.json("The article does not exist in storage!");
-//   }
-// });
+router.route("/articles/:title/delete").post((req, res) => {
+  const article = articleData.getDataByTitle(req.params.title);
+  if (article) {
+    articleData.storage = articleData.storage.filter(x => x !== article);
+    console.log(articleData.storage);
+    res.redirect("/articles");
+  } else {
+    res.json("The article does not exist in storage!");
+  }
+});
 
-// router
-//   .route("/articles/:title/edit")
-//   .get((req, res) => {
-//     const article = articleData.getDataByTitle(req.params.title);
-//     res.render("edit", article);
-//   })
-//   .post((req, res) => {
-//     if (
-//       req.body.title === "" ||
-//       req.body.body === "" ||
-//       req.body.author === ""
-//     ) {
-//       res.render("edit", {
-//         title: req.body.title,
-//         author: req.body.author,
-//         body: req.body.body,
-//         msg: "Please fill out all Fields!"
-//       });
-//     } else {
-//       const newStorage = articleData.storage.filter(
-//         x => x.title !== req.params.title
-//       );
-//       articleData.storage = newStorage;
-//       articleData.createNew(req.body);
-//       res.redirect("/articles/" + req.body.title);
-//     }
-//   });
+router
+  .route("/articles/:title/edit")
+  .get((req, res) => {
+    articleData.getArticleByTitle(req.params.title).then((articles) => {
+      res.render("edit", articles[0]);
+    });
+  })
+  .post((req, res) => {
+    if (
+      req.body.title === "" ||
+      req.body.body === "" ||
+      req.body.author === ""
+    ) {
+      res.render("edit", {
+        title: req.body.title,
+        author: req.body.author,
+        body: req.body.body,
+        msg: "Please fill out all Fields!"
+      });
+    } else {
+      articleData.updateArticle(req.params.title, req.body).then((articles) => {
+        console.log('Articles have been updated!!!!!')
+        res.redirect("/articles/" + req.body.title);
+        res.json({success: 'Article has been edited!', message: 'ok!'})
+      })
+      // const newStorage = articleData.storage.filter(
+      //   x => x.title !== req.params.title
+      // );
+      // articleData.storage = newStorage;
+
+      // articleData.createNew(req.body);
+    }
+  });
 
 module.exports = router;
-
-//what

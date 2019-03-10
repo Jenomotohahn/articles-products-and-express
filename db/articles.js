@@ -31,8 +31,13 @@ class Articles {
     newObj.body = data.body;
     newObj.author = data.author;
     newObj.url = encodeURI(data.title);
+    return newObj;
     // this.storage.push(newObj);
     // console.log(this.storage);
+  }
+
+  updateArticle(selectTitle, data){
+    return knex('articles').where('title', selectTitle).update({title: data.title, author: data.author, body: data.body, url: encodeURI(data.title)})
   }
   // initArticles() {
   //   this.storage.push({
