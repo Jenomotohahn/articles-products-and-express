@@ -21,10 +21,10 @@ class Articles {
     // // return this.storage[data];
     // return data
   }
-  getDataIndexNum(inputTitle) {
-    let num = this.storage.map(x => x.title).indexOf(inputTitle);
-    return num;
-  }
+  // getDataIndexNum(inputTitle) {
+  //   let num = this.storage.map(x => x.title).indexOf(inputTitle);
+  //   return num;
+  // }
   createNew(data) {
     let newObj = {};
     newObj.title = data.title;
@@ -38,6 +38,10 @@ class Articles {
 
   updateArticle(selectTitle, data){
     return knex('articles').where('title', selectTitle).update({title: data.title, author: data.author, body: data.body, url: encodeURI(data.title)})
+  }
+
+  deleteArticle(selectTitle){
+    return knex('articles').where('title', selectTitle).del()
   }
   // initArticles() {
   //   this.storage.push({

@@ -98,14 +98,17 @@ router
   });
 
 router.route("/articles/:title/delete").post((req, res) => {
-  const article = articleData.getDataByTitle(req.params.title);
-  if (article) {
-    articleData.storage = articleData.storage.filter(x => x !== article);
-    console.log(articleData.storage);
-    res.redirect("/articles");
-  } else {
-    res.json("The article does not exist in storage!");
-  }
+  articleData.deleteArticle(req.params.title).then(()=>{
+      res.redirect('/articles')
+  })
+  // const article = articleData.getDataByTitle(req.params.title);
+  // if (article) {
+  //   articleData.storage = articleData.storage.filter(x => x !== article);
+  //   console.log(articleData.storage);
+  //   res.redirect("/articles");
+  // } else {
+  //   res.json("The article does not exist in storage!");
+  // }
 });
 
 router
