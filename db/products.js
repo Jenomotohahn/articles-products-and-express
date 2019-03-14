@@ -1,15 +1,16 @@
+const knex = require('../database')
 class Products {
   constructor() {
-    this.storage = [];
-    this.idNum = 1;
-    this.initProds();
+    // this.storage = [];
+    // this.idNum = 1;
+    // this.initProds();
   }
-  getStorage() {
-    return this.storage.slice();
+  getAllProducts() {
+    return knex.select().from('products')
   }
   getProductById(prodId) {
-    let productById = this.storage.map(x => x.id).indexOf(prodId);
-    return this.storage[productById];
+    // let productById = this.storage.map(x => x.id).indexOf(prodId);
+    return knex.select().from('products').where('id', prodId)
   }
   createNewProd(data) {
     this.idNum++;

@@ -1,10 +1,13 @@
 const express = require("express");
 const router = express.Router();
 const productData = require("../db/products");
+const knex = require('../database');
 
 router.route("/products").get((req, res) => {
-  const products = productData.storage;
-  res.render("indexProd", { products });
+  // const products = productData.storage;
+  productData.getAllProducts().then((products)=>{
+    res.render("indexProd", { products });
+  })
 });
 
 router
@@ -36,8 +39,11 @@ router
   .route("/products/:id")
   .get((req, res) => {
     console.log(parseInt(req.params.id, 10));
-    const product = productData.getProductById(parseInt(req.params.id, 10));
-    res.render("product", { product });
+    productData.getProductById(parseInt(req.params.id)).then((products)=>{
+      console.log(products[0])
+      res.render("product",  products[0] );
+    })
+    // const product = productData.getProductById(parseInt(req.params.id, 10));
   })
   .post((req, res) => {
     console.log("before", productData.storage);

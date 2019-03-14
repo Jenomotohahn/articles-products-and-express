@@ -26,13 +26,13 @@ router
       res.json("file already in storage!");
     }
   })
-  .put((req, res) => {
-    let newArr = articleData.storage.filter(x => x.title !== req.body.title);
-    articleData.storage = newArr;
-    articleData.createNew(req.body);
-    console.log("storage", articleData.storage);
-    res.json("you have put!");
-  });
+  // .put((req, res) => {
+  //   let newArr = articleData.storage.filter(x => x.title !== req.body.title);
+  //   articleData.storage = newArr;
+  //   articleData.createNew(req.body);
+  //   console.log("storage", articleData.storage);
+  //   res.json("you have put!");
+  // });
 
 router
   .route("/articles/new")
